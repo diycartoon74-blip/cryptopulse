@@ -1,4 +1,12 @@
+# Byte-compiled
 __pycache__/
 *.py[cod]
+
+# Runtime state, recreated on first run: paper wallet, event log,
+# discovered Binance pairs and the server log
 data/
+
+# Local environments and secrets
 .env
+.venv/
+venv/
