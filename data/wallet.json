@@ -1,0 +1,24 @@
+{
+  "cash": 10000.0,
+  "positions": {},
+  "orders": [],
+  "trades": [],
+  "ledger": [
+    {
+      "id": "104454b8",
+      "at": 1793280845161,
+      "kind": "deposit",
+      "amount": 10000.0,
+      "note": "starting paper capital",
+      "cashAfter": 10000.0
+    }
+  ],
+  "lifetime": {
+    "deposited": 10000.0,
+    "withdrawn": 0.0,
+    "fees": 0.0,
+    "realised": 0.0
+  },
+  "opened_at": 1793280845.1617365,
+  "saved_at": 1793280845.1617365
+}
