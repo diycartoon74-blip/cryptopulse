@@ -1,0 +1,50 @@
+# Render blueprint for CryptoPulse.
+#
+#   Render -> New -> Blueprint -> connect this GitHub repo -> Render reads
+#   this file and creates the web service described below.
+#
+# Two things to know before you deploy:
+#   * Render's filesystem is ephemeral, so data/wallet.json (the paper
+#     portfolio, starred and pinned coins) is rebuilt from CAPITAL on every
+#     deploy or restart. A Render Disk fixes that but needs a paid instance.
+#   * There is no auth in this app. Anyone with the URL trades against the
+#     same paper wallet, so keep AUTO_TRADE off.
+
+services:
+  - type: web
+    name: cryptopulse
+    runtime: python
+    plan: free
+    region: singapore # nearest Render region to India; change if you prefer
+    branch: main
+    autoDeploy: true
+    buildCommand: pip install -r requirements.txt
+    # run.py binds HOST:PORT, so it picks up Render's PORT automatically.
+    # Alternative without the startup banner:
+    #   startCommand: uvicorn app.server:app --host 0.0.0.0 --port $PORT
+    startCommand: python run.py
+    healthCheckPath: /api/health
+    envVars:
+      # Render routes traffic to the container's single port; the app has to
+      # listen on all interfaces, not the 127.0.0.1 it defaults to locally.
+      - key: HOST
+        value: 0.0.0.0
+      - key: PYTHON_VERSION
+        value: "3.12"
+      # Unit every price, market cap and balance is quoted in. The browser can
+      # still switch to USD per viewer; this is the default the server sends.
+      - key: DISPLAY_CURRENCY
+        value: usdt
+      - key: TOP_COINS
+        value: "250"
+      - key: MARKETS_REFRESH_SECONDS
+        value: "60"
+      - key: CAPITAL
+        value: "10000"
+      # Signals still score and suggest; nothing executes on its own.
+      - key: AUTO_TRADE
+        value: "0"
+      # Optional demo CoinGecko key to lift the free rate limit. Add it in the
+      # Render dashboard (secret value) rather than committing it here.
+      - key: COINGECKO_API_KEY
+        sync: false
